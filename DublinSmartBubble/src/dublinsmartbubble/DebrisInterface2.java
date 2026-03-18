@@ -8,11 +8,10 @@ package dublinsmartbubble;
  *
  * @author Seán
  */
-public interface DebrisInterface {
-    public void add(DebrisType debris);
+public interface DebrisInterface2 {
+     public void add(DebrisType debris);
     public String toString();
-    DebrisType remove();
+    public boolean remove(String debrisType);
     int size();
     public boolean isEmpty();
-    
 }

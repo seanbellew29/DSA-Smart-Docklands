@@ -14,8 +14,9 @@ public class MetalDebris extends DebrisType{
         super(debrisType, size);
     }
     
-    public String description(){
-        return "Metal waste: " + debrisType + "size : " + size;
+    @Override
+    public String getDescription() {
+        return "Metal debris: " + debrisType + " Size: " + size;
     }
     
     

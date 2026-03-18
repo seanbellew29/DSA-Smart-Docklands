@@ -14,7 +14,8 @@ public class OrganicWaste extends DebrisType{
         super(debrisType, size);
     }
 
-    public String description(){
-        return "Organic waste : " + debrisType + "Size : " + size;
+    @Override
+    public String getDescription() {
+        return "Organic waste: " + debrisType + " Size: " + size;
     }
 }

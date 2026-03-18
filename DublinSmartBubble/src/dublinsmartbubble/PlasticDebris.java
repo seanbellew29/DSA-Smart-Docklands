@@ -15,7 +15,7 @@ public class PlasticDebris extends DebrisType{
     }
     
     @Override
-    public String description(){
-        return "Plastic debris " + debrisType + "size : " + size;
+    public String getDescription(){
+        return "Plastic debris " + debrisType+ "size : " + size;
     }
 }

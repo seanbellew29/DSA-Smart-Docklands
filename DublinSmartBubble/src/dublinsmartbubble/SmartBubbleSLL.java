@@ -8,63 +8,67 @@ package dublinsmartbubble;
  *
  * @author Seán
  */
-public class SmartBubbleSLL implements DebrisInterface{
+public class SmartBubbleSLL implements DebrisInterface2{
     private Node head;
-    
-    public SmartBubbleSLL(){
-        head = null;
-    }
-    
+
     @Override
-    public int size(){
-      return size();
-    }
-    
-    
-    @Override
-    public void add(DebrisType debris){
+    public void add(DebrisType debris) {
         Node newNode = new Node(debris);
-        
-        if(head == null){
-            head = null;
-        }else{
+        if(head == null)
+            head = newNode;
+        else{
             Node curr = head;
-            
-            while(curr.next != null){
+            while(curr.next != null)
                 curr = curr.next;
-            }
                 curr.next = newNode;
         }
     }
-    
+
     @Override
-    public DebrisType remove(){
-        if(head == null){
-            System.out.println("SLL is empty");
-            return null;
-        }
-            DebrisType debrisRemoved = head.data;
-            
-            if(head.next == null){
-                head = null;
-            }else {
-                head = head.next;
+    public boolean remove(String debrisType) {
+        Node curr = head, prev = null;
+        while(curr != null) {
+            if(curr.data.getDebrisType().equalsIgnoreCase(debrisType)) {
+                if(prev == null) {
+                    head = curr.next;
+                } else
+                    prev.next = curr.next;
+                    return true;
             }
-            return debrisRemoved;
-    }
-    
-    public boolean search(String debrisType) {
-        Node current = head;
-    while (current != null) {
-        if (current.data.getDebrisType().equalsIgnoreCase(debrisType)) {
-            return true;
+            prev = curr;
+            curr = curr.next;
         }
-             current = current.next;
+        return false;
     }
-         return false;
-}
-    
-    
-    
-    
+
+    @Override
+    public boolean isEmpty() {
+        return head == null; 
+    }
+
+    @Override
+    public int size() {
+        return size();
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer buff = new StringBuffer();
+        Node curr = head;
+        while(curr != null) {
+            buff.append(curr.data.getDescription()).append("\n");
+            curr = curr.next;
+        }
+        return buff.toString();
+    }
+
+    public boolean search(String debrisType) {
+        Node curr = head;
+        while(curr != null) {
+            if(curr.data.getDebrisType().equalsIgnoreCase(debrisType)) 
+                return true;
+            curr = curr.next;
+        }
+        return false;
+    }
 }

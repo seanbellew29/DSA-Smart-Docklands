@@ -4,6 +4,8 @@
  */
 package dublinsmartbubble;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Seán
@@ -46,6 +48,7 @@ public class SmartBubbleGUI extends javax.swing.JFrame {
         searchTA = new javax.swing.JTextArea();
         deleteBTN = new javax.swing.JButton();
         sizeEXLBL = new javax.swing.JLabel();
+        statsBTN = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -100,9 +103,22 @@ public class SmartBubbleGUI extends javax.swing.JFrame {
         deleteBTN.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         deleteBTN.setForeground(new java.awt.Color(255, 255, 255));
         deleteBTN.setText("Delete");
+        deleteBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteBTNActionPerformed(evt);
+            }
+        });
 
         sizeEXLBL.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         sizeEXLBL.setText("e.g(Small,Med,Large)");
+
+        statsBTN.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        statsBTN.setText("Show Stats");
+        statsBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                statsBTNActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -113,8 +129,10 @@ public class SmartBubbleGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(detailTF, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(statsBTN)
+                .addGap(45, 45, 45)
                 .addComponent(statLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(125, 125, 125))
+                .addGap(66, 66, 66))
             .addGroup(layout.createSequentialGroup()
                 .addGap(209, 209, 209)
                 .addComponent(titleLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -176,8 +194,10 @@ public class SmartBubbleGUI extends javax.swing.JFrame {
                                 .addComponent(searchBTN))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                        .addComponent(statLBL)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(statLBL)
+                            .addComponent(statsBTN))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(32, 32, 32))
@@ -188,49 +208,75 @@ public class SmartBubbleGUI extends javax.swing.JFrame {
 
     private void addBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBTNActionPerformed
          
-      String debrisType = detailTF.getText();
-    String size = sizeTF.getText();
+     String debrisType = detailTF.getText();
+        String size = sizeTF.getText();
         
-    DebrisType debris = new PlasticDebris(debrisType, size);
-        
-    smartQ.add(debris);
-     searchTA.append("Added to queue: "+ "\n");
+        if(debrisType.isEmpty() || size.isEmpty()) 
+            return;
 
-    detailTF.setText("");
-    sizeTF.setText("");
+        DebrisType debris = new PlasticDebris(debrisType, size);
+        smartQ.add(debris);
+        searchTA.append("Added to the queue: " + debris.getDescription() + "\n");
+
+        detailTF.setText("");
+        sizeTF.setText("");
+    
     }//GEN-LAST:event_addBTNActionPerformed
 
     private void startBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startBTNActionPerformed
 
-            DebrisType queue = smartQ.remove();
+           DebrisType fromQueue = smartQ.remove();
+        if(fromQueue != null) {
+            smartStack.add(fromQueue);
+            searchTA.append("Moved to the stack: " + fromQueue.getDescription() + "\n");
 
-         if (queue != null) {
-
-        smartStack.add(queue);
-         searchTA.append("Moved to stack: " + "\n");
-
-        DebrisType Stack = smartStack.remove();
-
-        if (Stack != null) {
-            smartSLL.add(Stack);
-             searchTA.append("Stored in list: " +  "\n");
+            DebrisType fromStack = smartStack.remove();
+            if(fromStack != null) {
+                smartSLL.add(fromStack);
+                searchTA.append("Stored in list: " + fromStack.getDescription() + "\n");
+            }
+        } else {
+            searchTA.append("Queue is empty" + "\n");
         }
-
-    } else {
-          searchTA.append("Queue is empty" + "\n");
-    }
+    
     }//GEN-LAST:event_startBTNActionPerformed
 
     private void searchBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBTNActionPerformed
-        String searchText = detailTF.getText();
-         boolean found = smartSLL.search(searchText);
-
-    if(found) {
-        searchTA.append(searchText + " found in list" + "\n");
-    } else {
-         searchTA.append(searchText + " not found" + "\n");
-    }
+        String searchText = JOptionPane.showInputDialog(null,  "Search for debris:");
+        
+        if(searchText != null && searchText.isEmpty()) {
+            boolean found = smartSLL.search(searchText);
+            if(found) {
+                 searchTA.append(searchText + " found " + "\n");
+            } else {
+                 searchTA.append(searchText + " not found" + "\n");
+            }
+        }
     }//GEN-LAST:event_searchBTNActionPerformed
+
+    private void statsBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statsBTNActionPerformed
+       statTA.setText("");
+        statTA.append("Queue:\n" + smartQ + "\n");
+        statTA.append("Stack:\n" + smartStack + "\n");
+        statTA.append("Linked List:\n" + smartSLL + "\n");
+    
+        
+    }//GEN-LAST:event_statsBTNActionPerformed
+
+    private void deleteBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBTNActionPerformed
+       String debrisType = JOptionPane.showInputDialog(this, "Enter debris type to delete:");
+        if(debrisType != null && debrisType.isEmpty()) {
+            
+            boolean removed = smartSLL.remove(debrisType);
+            if(removed) {
+                 searchTA.append(debrisType + " removed"  + "\n");
+            } else {
+                searchTA.append(debrisType + " not found" + "\n");
+            }
+        }
+    
+   
+    }//GEN-LAST:event_deleteBTNActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -248,6 +294,7 @@ public class SmartBubbleGUI extends javax.swing.JFrame {
     private javax.swing.JButton startBTN;
     private javax.swing.JLabel statLBL;
     private javax.swing.JTextArea statTA;
+    private javax.swing.JButton statsBTN;
     private javax.swing.JLabel titleLBL;
     // End of variables declaration//GEN-END:variables
 }

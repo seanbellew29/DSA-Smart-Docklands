@@ -33,11 +33,9 @@ public class DebrisType {
         return size;
     }
     
-    public String description(){
+    public String getDescription(){
         return "Debris Type : " + debrisType + "size : " + size;
     }
 
-    String getDescription() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    
 }

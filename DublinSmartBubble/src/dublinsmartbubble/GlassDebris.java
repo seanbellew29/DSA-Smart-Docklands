@@ -14,7 +14,8 @@ public class GlassDebris extends DebrisType{
         super(debrisType, size);
     }
     
-    public String description(){
+    @Override
+    public String getDescription(){
         return "Glass debris : " + debrisType + "size : " + size;
     }
 }

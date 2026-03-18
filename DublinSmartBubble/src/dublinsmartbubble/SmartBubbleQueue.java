@@ -9,47 +9,49 @@ package dublinsmartbubble;
  * @author Seán
  */
 public class SmartBubbleQueue implements DebrisInterface{
-    protected Node front;
-    protected Node back;
-    
-    public SmartBubbleQueue(){
-        front = null;
-        back = null;
-    }
-    
+    private Node front;
+    private Node back;
+
     @Override
-    public int size(){
+    public void add(DebrisType debris) {
+        Node newNode = new Node(debris);
+        if(back == null) 
+            front = back = newNode;
+        else { 
+            back.next = newNode; 
+            back = newNode; 
+        }
+    }
+
+    @Override
+    public DebrisType remove() {
+        if(front == null) 
+           return null;
+           DebrisType removed = front.data;
+           front = front.next;
+        if(front == null)
+            back = null;
+            return removed;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return front == null; 
+    }
+
+    @Override
+    public int size() {
         return size();
     }
-    
+
     @Override
-    public void add(DebrisType debris){
-        Node newNode = new Node(debris);
-        
-        if(back == null){
-           front = newNode;
-           back = newNode;
-        }else{
-            back.next = newNode;
-            back = newNode;
+    public String toString() {
+        StringBuffer buff = new StringBuffer();
+        Node curr = front;
+        while(curr != null) {
+            buff.append(curr.data.getDescription()).append("\n");
+            curr = curr.next;
         }
+        return buff.toString();
     }
-    @Override
-    public DebrisType remove(){
-        if(front == null){
-            System.out.println("Queue is empty");
-        }
-        
-        DebrisType debrisRemoved = front.data;
-        
-        if(front == back){
-            front = null;
-            back = null;
-        }else{
-            front = front.next;
-            
-        }
-        return debrisRemoved;
-    }
-    
 }

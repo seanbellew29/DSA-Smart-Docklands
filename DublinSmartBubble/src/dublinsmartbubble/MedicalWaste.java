@@ -14,7 +14,8 @@ public class MedicalWaste extends DebrisType{
         super(debrisType, size);
     }
     
-    public String description(){
-        return "Medical waste : " + debrisType + "Size : " + size;
+    @Override
+     public String getDescription() {
+        return "Medical waste: " + debrisType + " Size: " + size;
     }
 }
