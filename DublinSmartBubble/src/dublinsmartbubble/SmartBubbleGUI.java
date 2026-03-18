@@ -12,6 +12,9 @@ public class SmartBubbleGUI extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(SmartBubbleGUI.class.getName());
 
+    SmartBubbleQueue smartQ = new SmartBubbleQueue();
+    SmartBubbleSLL smartSLL = new SmartBubbleSLL();
+    SmartBubbleStack smartStack = new SmartBubbleStack();
     /**
      * Creates new form SmartBubbleGUI
      */
@@ -59,10 +62,20 @@ public class SmartBubbleGUI extends javax.swing.JFrame {
 
         addBTN.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         addBTN.setText("ADD");
+        addBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addBTNActionPerformed(evt);
+            }
+        });
 
         startBTN.setBackground(new java.awt.Color(0, 102, 102));
         startBTN.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         startBTN.setText("Start Process");
+        startBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startBTNActionPerformed(evt);
+            }
+        });
 
         statTA.setColumns(20);
         statTA.setRows(5);
@@ -73,6 +86,11 @@ public class SmartBubbleGUI extends javax.swing.JFrame {
 
         searchBTN.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         searchBTN.setText("Search");
+        searchBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchBTNActionPerformed(evt);
+            }
+        });
 
         searchTA.setColumns(20);
         searchTA.setRows(5);
@@ -141,10 +159,11 @@ public class SmartBubbleGUI extends javax.swing.JFrame {
                             .addComponent(detailLBL)
                             .addComponent(detailTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(sizeLBL)
-                            .addComponent(sizeTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(sizeEXLBL))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(sizeTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(sizeEXLBL)))
                         .addGap(18, 18, 18)
                         .addComponent(addBTN)
                         .addGap(18, 18, 18)
@@ -167,30 +186,52 @@ public class SmartBubbleGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void addBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBTNActionPerformed
+         
+      String debrisType = detailTF.getText();
+    String size = sizeTF.getText();
+        
+    DebrisType debris = new PlasticDebris(debrisType, size);
+        
+    smartQ.add(debris);
+     searchTA.append("Added to queue: "+ "\n");
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new SmartBubbleGUI().setVisible(true));
+    detailTF.setText("");
+    sizeTF.setText("");
+    }//GEN-LAST:event_addBTNActionPerformed
+
+    private void startBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startBTNActionPerformed
+
+            DebrisType queue = smartQ.remove();
+
+         if (queue != null) {
+
+        smartStack.add(queue);
+         searchTA.append("Moved to stack: " + "\n");
+
+        DebrisType Stack = smartStack.remove();
+
+        if (Stack != null) {
+            smartSLL.add(Stack);
+             searchTA.append("Stored in list: " +  "\n");
+        }
+
+    } else {
+          searchTA.append("Queue is empty" + "\n");
     }
+    }//GEN-LAST:event_startBTNActionPerformed
+
+    private void searchBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBTNActionPerformed
+        String searchText = detailTF.getText();
+         boolean found = smartSLL.search(searchText);
+
+    if(found) {
+        searchTA.append(searchText + " found in list" + "\n");
+    } else {
+         searchTA.append(searchText + " not found" + "\n");
+    }
+    }//GEN-LAST:event_searchBTNActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addBTN;

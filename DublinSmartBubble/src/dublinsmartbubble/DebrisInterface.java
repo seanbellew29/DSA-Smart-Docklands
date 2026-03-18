@@ -11,6 +11,6 @@ package dublinsmartbubble;
 public interface DebrisInterface {
     public void add(DebrisType debris);
     DebrisType remove();
-    DebrisType size();
+    int size();
     
 }
