@@ -244,7 +244,7 @@ public class SmartBubbleGUI extends javax.swing.JFrame {
     private void searchBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBTNActionPerformed
         String searchText = JOptionPane.showInputDialog(null,  "Search for debris:");
         
-        if(searchText != null && searchText.isEmpty()) {
+        if(searchText != null && searchText.length() > 0) {
             boolean found = smartSLL.search(searchText);
             if(found) {
                  searchTA.append(searchText + " found " + "\n");
@@ -265,7 +265,7 @@ public class SmartBubbleGUI extends javax.swing.JFrame {
 
     private void deleteBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBTNActionPerformed
        String debrisType = JOptionPane.showInputDialog(this, "Enter debris type to delete:");
-        if(debrisType != null && debrisType.isEmpty()) {
+        if(debrisType != null && !debrisType.isEmpty()) {
             
             boolean removed = smartSLL.remove(debrisType);
             if(removed) {
